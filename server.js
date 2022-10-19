@@ -8,11 +8,15 @@ const artist = require('./routes/artist')
 const user = require('./routes/user')
 const song = require('./routes/song');
 const errorHandler = require('./middlewares/error');
+const connectDB = require('./config/db');
 
 // To read our config values
 dotenv.config({path: './config/config.env'})
 
-//initialize our express framework
+// connection to DB
+connectDB();
+
+// initialize our express framework
 const app = express();
 
 // use the morgan logger for development purposes ONLY

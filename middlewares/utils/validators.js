@@ -2,7 +2,7 @@
 const songValidator = (req, res, next) => {
     if(req.body){
         if (
-            !req.body.songTitle ||
+            !req.body.songTitle || 
             !req.body.artist ||
             !req.body.genre
         ) {
