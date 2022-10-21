@@ -25,7 +25,7 @@ const artistValidator = (req, res, next) => {
         if (
             !req.body.firstName ||
             !req.body.lastName ||
-            !req.body.gender
+            !req.body.genre
         ) {
         res
         .status(400)
@@ -47,7 +47,11 @@ const userValidator = (req, res, next) => {
         if (
             !req.body.userName ||
             !req.body.gender ||
-            !req.body.age
+            !req.body.age ||
+            !req.body.email ||
+            !req.body.password ||
+            !req.body.firstName ||
+            !req.body.lastName
         ) {
         res 
         .status(400)
