@@ -244,7 +244,7 @@ const deleteSongRating = async (req, res, next) => {
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json({ success: true, msg:`Rating with rating ID: ${req.params.ratingId} was successfully deleted!`})
+        .json(rating)
         
     } catch (err) {
         throw new Error(`Error deleting song rating with rating ID: ${req.params.ratingId}`)
