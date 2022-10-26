@@ -21,7 +21,7 @@ const UserSchema = new Schema({
         ]
     },
     age: {
-        type: String,
+        type: Number,
         required: [true, 'Please add an age'],
         validate: (age) => {
             return typeof age === 'number'
@@ -50,6 +50,16 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         maxLength: [10, 'Last name cannot be more than 10 characters']
+    },
+    resetPasswordToken: {
+        type: String
+    },
+    resetPasswordExpire:{
+        type: Date
+    },
+    admin: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true
@@ -63,10 +73,9 @@ UserSchema.pre('save', function(next) {
     next();
 })
 
-// UserSchema.post('save', () => {
-//     this.gender = this.gender.toUpperCase();
+UserSchema.post('save', function() {
+    this.gender = this.gender.toUpperCase();
 
-//     next();
-// } )
+} )
 
 module.exports = mongoose.model('User', UserSchema);

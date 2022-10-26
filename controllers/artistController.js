@@ -1,4 +1,5 @@
 const Artist = require('../models/Artist');
+const path = require('path')
 
 // For '/' endpoint:
 const getArtists = async (req, res, next) => {
@@ -122,11 +123,45 @@ const deleteArtist = async (req, res, next) => {
     
 }
 
+const postArtistImage = async(req, res, next) => {
+    // check if req has a key called files
+    if(!req.files) throw new Error('Missing image!')
+
+    // create a new variable called 'file' and assign it to the req.files.file value
+    const file = req.files.file
+
+    // check if the file type is a 'image' type
+    if (!file.mimetype.startsWith('image')) throw new Error('Please upload an image file type!')
+
+    // check if the file size exceeds the limit that was set at 100000000 or 100000 mega-bytes
+    if (file.size > process.env.MAX_FILE_SIZE) throw new Error(`Image exceeds size of ${process.env.MAX_FILE_SIZE}`);
+
+    file.name = `photo_${path.parse(file.name).ext}`
+    // file.name = `photo_${file.name}`
+
+    const filePath = process.env.FILE_UPLOAD_PATH + file.name
+    
+    // moves the file to the filePath variable, the argument async will handle the uploading of the new image to the database.
+    file.mv((filePath), async (err) => {
+        if (err) throw new Error('Problem uploading photo');
+
+        // upload the new file with the value being the file.name
+        await Artist.findByIdAndUpdate(req.params.artistId, { image: file.name})
+
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json({ success: true, data: file.name})
+    })
+
+}
+
 module.exports = {
     getArtists,
     postArtist,
     deleteArtists,
     getArtist,
     updateArtist,
-    deleteArtist
+    deleteArtist,
+    postArtistImage
 }

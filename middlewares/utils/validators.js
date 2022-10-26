@@ -8,7 +8,7 @@ const songValidator = (req, res, next) => {
         ) {
         res
         .status(400)
-        .setHeader('Content-Type', 'text/plain')
+        .setHeader('Content-Type', 'application/json')
         .json({ success: false, msg: 'Missing Required Fields '})
         } else {
             next();
@@ -29,7 +29,7 @@ const artistValidator = (req, res, next) => {
         ) {
         res
         .status(400)
-        .setHeader('Content-Type', 'text/plain')
+        .setHeader('Content-Type', 'application/json')
         .json({ success: false, msg: 'Missing Required Fields '})
         } else {
             next();
@@ -55,7 +55,7 @@ const userValidator = (req, res, next) => {
         ) {
         res 
         .status(400)
-        .setHeader('Content-Type', 'text/plain')
+        .setHeader('Content-Type', 'application/json')
         .json({ success: false, msg: 'Missing Required Fields '})
         } else {
             next();
@@ -66,8 +66,23 @@ const userValidator = (req, res, next) => {
     }
 }
 
+const adminValidator = (req, res, next) => {
+
+    // check if admin value is true from req.user
+    if(req.user.admin) {
+        next()
+    } else {
+        res
+        .status(403)
+        .setHeader('Content-Type', 'application/json')
+        .json({ success: false, msg:"Unauthorized to access this resource"})
+    }
+
+}
+
 module.exports = {
     songValidator,
     artistValidator,
-    userValidator
+    userValidator,
+    adminValidator
 }

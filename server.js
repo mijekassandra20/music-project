@@ -9,6 +9,8 @@ const user = require('./routes/user')
 const song = require('./routes/song');
 const errorHandler = require('./middlewares/error');
 const connectDB = require('./config/db');
+const cookieParser = require('cookie-parser')
+const fileupload = require('express-fileupload')
 
 // To read our config values
 dotenv.config({path: './config/config.env'})
@@ -26,6 +28,12 @@ if (process.env.NODE_ENV === 'development') {
 
 // read/parse json data
 app.use(bodyParser.json())
+
+// parse cookies
+app.use(cookieParser());
+
+// file upload middleware
+app.use(fileupload());
 
 // use our logger
 app.use(logger);
