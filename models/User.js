@@ -1,6 +1,9 @@
 // import mongoose
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 // instanstiate schema
 const Schema = mongoose.Schema;
@@ -77,5 +80,30 @@ UserSchema.post('save', function() {
     this.gender = this.gender.toUpperCase();
 
 } )
+
+// pre hook that hashes a password before it saves in the database
+UserSchema.pre('save', async function(next) {
+    // check if the password is not modified
+    if(!this.isModified('password')) next(); //login
+
+    // salt the password
+    const salt = await bcrypt.genSalt(10)
+    this.password = await bcrypt.hash(this.password, salt) // for resetPassword, create new Password, update Password
+})
+
+// retrieve signed JWT token when user logs in OR create new acc
+UserSchema.methods.getSignedJwtToken = function() {
+    return jwt.sign(
+        {id: this._id},
+        process.env.JWT_SECRET,
+        {expiresIn: process.env.JWT_EXPIRE}
+        )
+}
+
+// checks the passwords sent by user and match it from database
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password)
+}
+
 
 module.exports = mongoose.model('User', UserSchema);
