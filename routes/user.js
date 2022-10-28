@@ -11,7 +11,11 @@ const {
     getUser,
     updateUser,
     deleteUser, 
-    login
+    login,
+    forgotPassword,
+    resetPassword,
+    updatePassword,
+    logout
 
 } = require('../controllers/userController')
 const reqRecievedLogger = require('../middlewares/reqRecievedLogger');
@@ -23,12 +27,24 @@ const {
 } = require('../middlewares/utils/validators')
 
 router.route('/')
-    .get(reqRecievedLogger, adminValidator, getUsers)
+    .get(reqRecievedLogger, protectedRoute, adminValidator, getUsers)
     .post(reqRecievedLogger, userValidator, postUser)
     .delete(reqRecievedLogger, protectedRoute, deleteUsers)
 
 router.route('/login')
     .post(reqRecievedLogger, login)
+
+router.route('/forgotpassword')
+    .post(reqRecievedLogger, forgotPassword)
+
+router.route('/resetpassword')
+    .put(reqRecievedLogger, resetPassword)
+
+router.route('/updatepassword')
+    .put(reqRecievedLogger, protectedRoute, updatePassword )
+
+router.route('/logout')
+    .get(reqRecievedLogger, protectedRoute, logout)
 
 router.route('/:userId')
     .get(reqRecievedLogger, getUser)

@@ -147,6 +147,85 @@ const login = async (req, res, next) => {
 
 }
 
+// For '/forgotpassword' endpoint
+
+const forgotPassword = async (req, res, next) => {
+    const user = await User.findOne( {email: req.body.email}) // retrieve the user using email
+
+    if(!user) throw new Error('No user found!') // if no user exist
+
+    const resetToken = user.getResetPasswordToken();
+
+    try {
+        await user.save({ validateBeforeSave: false }) // save and skip the pre hook
+
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json({
+            success: true, 
+            msg: `Password has been reset with token: ${resetToken}`
+        })
+
+    } catch (err) {
+        this.resetPasswordToken = undefined;
+        this.resetPasswordExpire = undefined;
+
+        await user.save({ validateBeforeSave: false})
+
+        throw new Error('Failed to save new password!')
+    }
+}
+
+// For '/resetpassword' endpoint
+const resetPassword = async (req, res, next) => {
+    const resetPasswordToken = crypto.createHash('sha256').update(req.query.resetToken).digest('hex')
+
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: { $gt:Date.now() } // find a resetPasswordExpire greater than the current time if there is one
+    })
+
+    if(!user) throw new Error('Invalid token!')
+
+    user.password = req.body.password; // set the password with the req.body.password
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save()
+
+    sendTokenResponse(user, 200, res)
+}
+
+// For '/updatepassword'
+const updatePassword = async (req, res, next) => {
+    // find a user with that ID and return along with the password
+    const user = await User.findById(req.user.id).select('+password') 
+
+    const passwordMatches = await user.matchPassword(req.body.password); //match it with the one in DB
+
+    if(!passwordMatches) throw new Error('Password is incorrect')
+
+    user.password = req.body.newPassword // reassign the password in the db with the req.body.password
+
+    await user.save()
+
+    sendTokenResponse(user, 200, res)
+}
+
+// For '/logout' endpoint
+const logout = async(req, res, next) => {
+    res
+    .status(200)
+    res.cookie('token','none', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true
+    })
+    .json({sucess: true, msg: 'Successfully logged out!'})
+}
+
+
+
 // function for sendTokenResponse 
 const sendTokenResponse = (user, statusCode, res) => {
 
@@ -175,5 +254,9 @@ module.exports = {
     getUser,
     updateUser,
     deleteUser,
-    login
+    login,
+    forgotPassword,
+    resetPassword,
+    updatePassword,
+    logout
 }
