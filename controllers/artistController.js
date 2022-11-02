@@ -136,8 +136,8 @@ const postArtistImage = async(req, res, next) => {
     // check if the file size exceeds the limit that was set at 100000000 or 100000 mega-bytes
     if (file.size > process.env.MAX_FILE_SIZE) throw new Error(`Image exceeds size of ${process.env.MAX_FILE_SIZE}`);
 
-    file.name = `photo_${path.parse(file.name).ext}`
-    // file.name = `photo_${file.name}`
+    //file.name = `photo_${path.parse(file.name).ext}`
+    file.name = `photo_${file.name}`
 
     const filePath = process.env.FILE_UPLOAD_PATH + file.name
     
