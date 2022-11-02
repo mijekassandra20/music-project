@@ -55,7 +55,7 @@ const postArtist = async (req, res, next) => {
     res
     .status(201)
     .setHeader('Content-Type', 'application/json')
-    .json({ success: true, msg: 'add new artist '})
+    .json({ success: true, msg: 'Successfully added new artist!'})
 }
 
 const deleteArtists = async (req, res, next) => {
@@ -66,7 +66,7 @@ const deleteArtists = async (req, res, next) => {
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json({ success: true, msg: 'delete all artists!'})
+        .json({ success: true, msg: 'Successfully deleted all artists!'})
 
     } catch (err) {
         throw new Error(`Error deleting all artist: ${err.message}`)
@@ -115,7 +115,7 @@ const deleteArtist = async (req, res, next) => {
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json({ success: true, msg: `delete artist with id: ${req.params.artistId} `})
+        .json({ success: true, msg: `Artist with id: ${req.params.artistId} was successfully deleted!`})
 
     } catch (err) {
         throw new Error(`Error deleting a user with ID ${req.params.artistId}: ${err.message}`)

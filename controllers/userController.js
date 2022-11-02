@@ -72,7 +72,7 @@ const deleteUsers = async (req, res, next) => {
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json({ success: true, msg: 'delete all users!'})
+        .json({ success: true, msg: 'Successfully deleted all users!'})
 
     } catch (err) {
         throw new Error(`Error deleting all users: ${err.message}`)
@@ -121,7 +121,7 @@ const deleteUser = async (req, res, next) => {
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json({ success: true, msg: `delete user with id: ${req.params.userId} `})
+        .json({ success: true, msg: `User with id: ${req.params.userId} was successfully deleted!`})
 
         
     } catch (err) {

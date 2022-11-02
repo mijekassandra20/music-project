@@ -68,7 +68,7 @@ const deleteSongs = async (req, res, next) => {
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json({ success: true, msg: 'All songs deleted Successfully!'})
+        .json({ success: true, msg: 'Successfully deleted all songs!'})
 
     } catch (err){
         throw new Error(`Error deleting all song ${err.message}`)
@@ -169,7 +169,7 @@ const deleteSongRatings = async (req, res, next) => {
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json({ success: true, msg: 'All ratings deleted successfully!'})
+        .json({ success: true, msg: 'Successfully deleted all ratings!'})
 
     } catch (err) {
         throw new Error(`Error deleting all ratings ${err.message}`)
