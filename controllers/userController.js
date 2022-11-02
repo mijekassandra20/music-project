@@ -116,7 +116,7 @@ const updateUser = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
 
     try {
-        await User.findByIdAndDelete(req.param.userId);
+        await User.findByIdAndDelete(req.params.userId);
 
         res
         .status(200)
