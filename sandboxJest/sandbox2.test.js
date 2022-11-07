@@ -34,7 +34,6 @@ describe('tests twoSum function', () => {
 describe('tests fetchProfile function', () => {
 
     test('should return an email of `Shanna@melissa.tv` ', async () => {
-        // fetch data
         const fetchData = await fetchProfile();
 
         expect(fetchData.data.email).toEqual('Shanna@melissa.tv');
