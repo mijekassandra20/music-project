@@ -54,7 +54,7 @@ describe('tests fetchProfile function', () => {
     test('should return false if it DOES NOT have a zipcode of `90388-2220` ', async () => {
         const fetchData = await fetchProfile();
 
-        expect(fetchData.data.address.zipcode).not.toContain('90388-2220');
+        expect(fetchData.data.address.zipcode).not.toEqual('90388-2220');
     });
 });
 
